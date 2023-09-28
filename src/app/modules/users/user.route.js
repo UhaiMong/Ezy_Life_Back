@@ -11,19 +11,16 @@ router.post(
   UserController.registerUser
 );
 
-router.post(
-  "/login",
-  validateRequest(UserValidation.loginUserZodSchema),
-  UserController.loginUser
-);
+// get all users
+router.get("/", UserController.getAllUsers);
 
-// // get all users
-// router.get("/", UserController.createFaculty);
+// get single user
+router.get("/:id", UserController.getSingleUser);
 
-// // get single user
-// router.get("/:id", UserController.createFaculty);
+// update user
+router.put("/:id", UserController.updateUser);
 
-// // update user
-// router.put("/:id", UserController.createFaculty);
+// delete user
+router.delete("/:id", UserController.deleteUser);
 
 export const UserRoutes = router;

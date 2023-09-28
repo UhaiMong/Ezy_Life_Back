@@ -1,92 +1,85 @@
-import httpStatus from "http-status";
+import { paginationHelper } from "../../../helpers/paginationHelpers.js";
+import { usersSearchableField } from "./user.constant.js";
 import { User } from "./user.model.js";
-import ApiError from "../../../errors/ApiError.js";
-import { JWTHelper } from "../../../helpers/jwtHelper.js";
-import config from "../../../config/index.js";
 
 const registerUser = async (payload) => {
-  const { email, password, name, phoneNumber } = payload;
-  const user = new User();
-  const isUserExist = await user.isUserExist(email);
+  const result = await User.create(payload);
+  return result;
+};
 
-  if (isUserExist) {
-    throw new ApiError(httpStatus.CONFLICT, "User already exists");
+const getAllUsers = async (filters, paginationOption) => {
+  const { searchTerm, ...filteredData } = filters;
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOption);
+
+  const andConditions = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      $or: usersSearchableField.map((field) => ({
+        [field]: {
+          $regex: searchTerm,
+          $options: "i",
+        },
+      })),
+    });
   }
 
-  const newUser = new User({
-    email,
-    password,
-    name,
-    phoneNumber,
-  });
+  if (Object.keys(filteredData).length) {
+    andConditions.push({
+      $and: Object.entries(filteredData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
 
-  await newUser.save();
+  const sortConditions = {};
 
-  // Create access and refresh tokens
-  const { email: userEmail, role } = newUser;
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder;
+  }
 
-  const accessToken = JWTHelper.createToken(
-    { userEmail, role },
-    config.jwt.secret,
-    config.jwt.expireIn
-  );
+  const whereCondition =
+    andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const refreshToken = JWTHelper.createToken(
-    { userEmail, role },
-    config.jwt.refreshSecret,
-    config.jwt.refresh_expireIn
-  );
+  const result = await User.find(whereCondition)
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await User.countDocuments(whereCondition);
 
   return {
-    accessToken,
-    refreshToken,
-    name,
-    email,
-    phoneNumber,
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
   };
 };
 
-const loginUser = async (payload) => {
-  const { email, password } = payload;
+const getSingleUser = async (id) => {
+  const result = await User.findById(id);
+  return result;
+};
 
-  // instance of User model
-  const user = new User();
+const updateUser = async (id, payload) => {
+  const result = await User.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+  return result;
+};
 
-  const isUserExist = await user.isUserExist(email);
-
-  if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
-  }
-
-  if (
-    isUserExist.password &&
-    !user.isPasswordMatched(password, isUserExist.password)
-  ) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Password is incorrect");
-  }
-
-  const { email: userEmail, role } = isUserExist;
-
-  // create token
-  const accessToken = JWTHelper.createToken(
-    { userEmail, role },
-    config.jwt.secret,
-    config.jwt.expireIn
-  );
-
-  const refreshToken = JWTHelper.createToken(
-    { userEmail, role },
-    config.jwt.refreshSecret,
-    config.jwt.refresh_expireIn
-  );
-
-  return {
-    accessToken,
-    refreshToken,
-  };
+const deleteUser = async (id) => {
+  const result = await User.findByIdAndDelete(id);
+  return result;
 };
 
 export const UserService = {
   registerUser,
-  loginUser,
+  getAllUsers,
+  getSingleUser,
+  updateUser,
+  deleteUser,
 };
