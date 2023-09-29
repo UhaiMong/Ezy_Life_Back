@@ -4,30 +4,34 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
+      unique: false,
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
     },
     phoneNumber: {
       type: String,
+      unique: true,
     },
     nid: {
       type: String,
+      unique: true,
     },
     drivingLicense: {
       type: String,
+      unique: true,
     },
     gender: {
       type: String,
+      unique: true,
     },
     role: {
       type: String,
-      default: "user",
+      unique: true,
     },
-    profileImage: {
+    photoURL: {
       type: String,
+      unique: true,
     },
   },
   {

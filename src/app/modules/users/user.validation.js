@@ -13,7 +13,7 @@ const registerUserZodSchema = z.object({
     drivingLicense: z.string({}).optional(),
     gender: z.string({}).optional(),
     role: z.string({}).optional(),
-    profileImage: z.string().optional(),
+    photoURL: z.string().optional(),
   }),
 });
 

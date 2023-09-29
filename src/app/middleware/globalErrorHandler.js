@@ -51,7 +51,7 @@ const globalErrorHandler = (error, req, res, next) => {
 
   res.status(statusCode).json({
     success: false,
-    message,
+    message: error ? error : message,
     errorMessages,
     stack: config.env !== "production" ? error.stack : undefined,
   });
