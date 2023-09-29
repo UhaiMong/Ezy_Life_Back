@@ -2,9 +2,11 @@ import { z } from "zod";
 
 const registerUserZodSchema = z.object({
   body: z.object({
-    name: z.string({
-      required_error: "Name is required",
-    }),
+    name: z
+      .string({
+        required_error: "Name is required",
+      })
+      .optional(),
     email: z
       .string({
         required_error: "Email is required",
