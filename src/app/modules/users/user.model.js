@@ -8,30 +8,31 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
+      unique: true,
     },
     phoneNumber: {
       type: String,
-      unique: true,
+      unique: false,
     },
     nid: {
       type: String,
-      unique: true,
+      unique: false,
     },
     drivingLicense: {
       type: String,
-      unique: true,
+      unique: false,
     },
     gender: {
       type: String,
-      unique: true,
+      unique: false,
     },
     role: {
       type: String,
-      unique: true,
+      unique: false,
     },
     photoURL: {
       type: String,
-      unique: true,
+      unique: false,
     },
   },
   {
@@ -39,23 +40,20 @@ const userSchema = new Schema(
   }
 );
 
-// userSchema.methods.isUserExist = async function (email) {
-//   return await User.findOne({ email }, { email: 1, password: 1, role: 1 });
-// };
-
-// userSchema.pre("save", async function (next) {
-//   this.password = await bcrypt.hash(
-//     this.password,
-//     Number(config.bcrypt_rounds)
-//   );
-//   next();
-// });
-
-// userSchema.methods.isPasswordMatched = async function (
-//   givenPassword,
-//   savedPassword
-// ) {
-//   return await bcrypt.compare(givenPassword, savedPassword);
-// };
-
 export const User = model("User", userSchema);
+
+// Specify the field names for which you want to remove the unique indexes
+const fieldsToRemoveIndexes = [
+  "phoneNumber",
+  "name",
+  "drivingLicense",
+  "nid",
+  "gender",
+  "role",
+  "photoURL",
+  "password",
+];
+
+fieldsToRemoveIndexes.forEach((fieldName) => {
+  User.collection.dropIndex({ [fieldName]: 1 }, (error, result) => {});
+});
