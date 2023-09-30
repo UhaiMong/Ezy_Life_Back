@@ -58,6 +58,10 @@ const BikeSchema = new Schema(
       type: String,
       required: true,
     },
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,
