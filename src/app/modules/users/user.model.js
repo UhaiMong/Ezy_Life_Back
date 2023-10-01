@@ -1,4 +1,6 @@
 import { Schema, model } from "mongoose";
+import httpStatus from "http-status";
+import ApiError from "../../../errors/ApiError.js";
 
 const userSchema = new Schema(
   {
@@ -39,6 +41,16 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
+
+userSchema.pre("save", async function (next) {
+  const isExist = await User.findOne({
+    email: this.email,
+  });
+  if (isExist) {
+    throw new ApiError(httpStatus.CONFLICT, "Email is already exist");
+  }
+  next();
+});
 
 export const User = model("User", userSchema);
 

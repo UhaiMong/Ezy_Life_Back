@@ -31,11 +31,11 @@ const BikeSchema = new Schema(
     fuel: {
       type: Number,
     },
-    startTime: {
+    start_time: {
       type: String,
       required: true,
     },
-    endTime: {
+    end_time: {
       type: String,
       required: true,
     },
@@ -46,11 +46,11 @@ const BikeSchema = new Schema(
       type: String,
       required: true,
     },
-    startDate: {
+    start_date: {
       type: String,
       required: true,
     },
-    endDate: {
+    end_date: {
       type: String,
       required: true,
     },
@@ -58,9 +58,21 @@ const BikeSchema = new Schema(
       type: String,
       required: true,
     },
-    totalAmount: {
+    paymentStatus: {
+      type: String,
+      default: "Pending",
+    },
+    rentStatus: {
+      type: String,
+      default: "Pending",
+    },
+    total_amount: {
       type: Number,
       required: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {

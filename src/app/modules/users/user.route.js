@@ -11,11 +11,11 @@ router.post(
   UserController.registerUser
 );
 
+// get single user
+router.get("/:email", UserController.getSingleUser);
+
 // get all users
 router.get("/", UserController.getAllUsers);
-
-// get single user
-router.get("/:id", UserController.getSingleUser);
 
 // update user
 router.put("/:id", UserController.updateUser);

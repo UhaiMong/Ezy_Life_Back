@@ -9,10 +9,6 @@ const registerUserZodSchema = z.object({
       })
       .email(),
     phoneNumber: z.string({}).optional(),
-    nid: z.string({}).optional(),
-    drivingLicense: z.string({}).optional(),
-    gender: z.string({}).optional(),
-    role: z.string({}).optional(),
     photoURL: z.string().optional(),
   }),
 });

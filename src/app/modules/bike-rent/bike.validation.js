@@ -20,25 +20,28 @@ const bikeRentZodSchema = z.object({
     destination: z.string({
       required_error: "Final Destination is required",
     }),
-    fuel: z.number({}).optional(),
-    startTime: z.string({
+    fuel: z.string({}).optional(),
+    start_time: z.string({
       required_error: "Start time is required",
     }),
-    startTime: z.string({
-      required_error: "Start time is required",
-    }),
-    endTime: z.string({
-      required_error: "Start time is required",
+    end_time: z.string({
+      required_error: "End time is required",
     }),
     rider: z.string({}).optional(),
-    startDate: z.string({
+    gender: z.string({
+      required_error: "Gender is required",
+    }),
+    start_date: z.string({
       required_error: "Start Date is required",
     }),
-    endDate: z.string({
+    end_date: z.string({
       required_error: "End Date is required",
     }),
     bikeType: z.string({
       required_error: "Bike type is required",
+    }),
+    total_amount: z.number({
+      required_error: "Total amount is required",
     }),
   }),
 });
