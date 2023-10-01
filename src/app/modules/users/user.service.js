@@ -1,8 +1,25 @@
+import httpStatus from "http-status";
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { usersSearchableField } from "./user.constant.js";
 import { User } from "./user.model.js";
+import ApiError from "../../../errors/ApiError.js";
 
 const registerUser = async (payload) => {
+  const isExist = await User.findOne({
+    email: payload?.email,
+  });
+
+  if (isExist && payload?.registration) {
+    throw new ApiError(httpStatus.CONFLICT, "Email is already exist");
+  }
+
+  if (isExist) {
+    const result = await User.updateOne({ email: payload?.email }, payload);
+    if (result.modifiedCount === 1) {
+      const updatedUser = await User.findOne({ email: payload?.email });
+      return updatedUser;
+    }
+  }
   const result = await User.create(payload);
   return result;
 };

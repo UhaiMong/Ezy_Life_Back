@@ -36,21 +36,24 @@ const userSchema = new Schema(
       type: String,
       unique: false,
     },
+    registration: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-userSchema.pre("save", async function (next) {
-  const isExist = await User.findOne({
-    email: this.email,
-  });
-  if (isExist) {
-    throw new ApiError(httpStatus.CONFLICT, "Email is already exist");
-  }
-  next();
-});
+// userSchema.pre("save", async function (next) {
+//   const isExist = await User.findOne({
+//     email: this.email,
+//   });
+//   if (isExist) {
+//     throw new ApiError(httpStatus.CONFLICT, "Email is already exist");
+//   }
+//   next();
+// });
 
 export const User = model("User", userSchema);
 
