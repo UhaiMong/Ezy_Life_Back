@@ -59,4 +59,27 @@ const getBlog = async (filters, paginationOption) => {
   };
 };
 
-export const BlogService = { addBlog, getBlog };
+const getSingleBlog = async (id) => {
+  const result = await Blog.findById(id);
+  return result;
+};
+
+const updateBlog = async (id, payload) => {
+  const result = await Blog.findByIdAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+  return result;
+};
+
+const deleteBlog = async (id) => {
+  const result = await Blog.findByIdAndDelete(id);
+  return result;
+};
+
+export const BlogService = {
+  addBlog,
+  getBlog,
+  getSingleBlog,
+  updateBlog,
+  deleteBlog,
+};
