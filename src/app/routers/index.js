@@ -1,7 +1,7 @@
 import express from "express";
 import { UserRoutes } from "../modules/users/user.route.js";
 import { BikeRentRoutes } from "../modules/bike-rent/bike.route.js";
-import { PercelRoutes } from "../modules/parcel/parcel.route.js";
+import { ParcelRoutes } from "../modules/parcel/parcel.route.js";
 
 const routers = express.Router();
 
@@ -15,8 +15,8 @@ const routerModule = [
     route: BikeRentRoutes,
   },
   {
-    path: "/percel",
-    route: PercelRoutes,
+    path: "/parcel",
+    route: ParcelRoutes,
   },
 ];
 

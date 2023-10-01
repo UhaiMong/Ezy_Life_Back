@@ -1,8 +1,8 @@
-import { Percel } from "./parcel.model.js";
+import { Parcel } from "./parcel.model.js";
 
-const bookPercel = async (payload) => {
-  const result = (await Percel.create(payload)).populate("user");
+const bookParcel = async (payload) => {
+  const result = (await Parcel.create(payload)).populate("user");
   return result;
 };
 
-export const ParcelService = { bookPercel };
+export const ParcelService = { bookParcel };

@@ -63,4 +63,4 @@ const ParcelSchema = new Schema(
   }
 );
 
-export const Percel = model("Percel", ParcelSchema);
+export const Parcel = model("Parcel", ParcelSchema);

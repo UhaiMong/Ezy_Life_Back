@@ -5,12 +5,12 @@ import { ParcelService } from "./parcel.service.js";
 
 const bookParcel = catchAsync(async (req, res) => {
   const { ...bookingData } = req.body;
-  const result = await ParcelService.bookPercel(bookingData);
+  const result = await ParcelService.bookParcel(bookingData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Your percel book successful",
+    message: "Your parcel book successful",
     data: result,
   });
 });

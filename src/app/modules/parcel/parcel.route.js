@@ -11,4 +11,4 @@ router.post(
   ParcelController.bookParcel
 );
 
-export const PercelRoutes = router;
+export const ParcelRoutes = router;
