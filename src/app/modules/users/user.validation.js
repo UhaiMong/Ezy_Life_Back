@@ -9,7 +9,6 @@ const registerUserZodSchema = z.object({
       })
       .email(),
     phoneNumber: z.string({}).optional(),
-    photoURL: z.nullable().optional(),
   }),
 });
 
