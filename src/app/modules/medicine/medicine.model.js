@@ -51,4 +51,17 @@ const MedicineSchema = new Schema(
   }
 );
 
+MedicineSchema.pre("save", function (next) {
+  if (this.basePrice && this.discountPrice) {
+    const percentageDiscount =
+      ((this.basePrice - this.discountPrice) / this.basePrice) * 100;
+
+    this.discount = Math.round(percentageDiscount * 100) / 100;
+  } else {
+    this.discount = null;
+  }
+
+  next();
+});
+
 export const Medicine = model("Medicine", MedicineSchema);
