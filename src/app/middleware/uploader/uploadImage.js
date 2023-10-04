@@ -14,6 +14,9 @@ function avatarUpload(req, res, next) {
     if (err) {
       throw new ApiError(500, err.message);
     } else {
+      const filenames = req.files.map((file) => file.filename);
+      req.image = filenames[0];
+
       next();
     }
   });
