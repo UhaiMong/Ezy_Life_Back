@@ -2,6 +2,7 @@ import express from "express";
 import { BlogValidation } from "./blog.validation.js";
 import { BlogController } from "./blog.controller.js";
 import validateRequest from "../../middleware/validationRequest.js";
+// import avatarUpload from "../../middleware/uploader/uploadImage.js";
 
 const router = express.Router();
 
@@ -10,6 +11,10 @@ router.post(
   validateRequest(BlogValidation.blogZodSchema),
   BlogController.addBlog
 );
+
+// router.post("/", avatarUpload, (req, res) => {
+//   res.send("uploaded");
+// });
 
 router.get("/", BlogController.getBlog);
 
