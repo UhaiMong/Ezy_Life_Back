@@ -72,9 +72,15 @@ const updateMedicine = async (id, payload) => {
   return result;
 };
 
+const deleteMedicine = async (id) => {
+  const result = await Medicine.findOneAndDelete(id);
+  return result;
+};
+
 export const MedicineService = {
   addMedicine,
   getAllMedicine,
   getMedicineById,
   updateMedicine,
+  deleteMedicine,
 };

@@ -12,4 +12,6 @@ router.get("/:id", MedicineController.getMedicineById);
 
 router.patch("/:id", avatarUpload, MedicineController.updateMedicine);
 
+router.delete("/:id", MedicineController.deleteMedicine);
+
 export const MedicineRoutes = router;

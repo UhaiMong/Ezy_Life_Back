@@ -55,10 +55,21 @@ const updateMedicine = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const deleteMedicine = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await MedicineService.deleteMedicine(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Medicine deleted successful",
+    data: result,
+  });
+});
 
 export const MedicineController = {
   addMedicine,
   getAllMedicine,
   getMedicineById,
   updateMedicine,
+  deleteMedicine,
 };
