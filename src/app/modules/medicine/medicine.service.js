@@ -59,4 +59,22 @@ const getAllMedicine = async (filters, paginationOption) => {
   };
 };
 
-export const MedicineService = { addMedicine, getAllMedicine };
+const getMedicineById = async (id) => {
+  const result = await Medicine.findById(id);
+  return result;
+};
+
+const updateMedicine = async (id, payload) => {
+  console.log(payload);
+  const result = await Medicine.findByIdAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+  return result;
+};
+
+export const MedicineService = {
+  addMedicine,
+  getAllMedicine,
+  getMedicineById,
+  updateMedicine,
+};

@@ -28,10 +28,37 @@ const getAllMedicine = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Medicine fetched successful",
+    message: "Medicines fetched successful",
     meta: result.meta,
     data: result.data,
   });
 });
 
-export const MedicineController = { addMedicine, getAllMedicine };
+const getMedicineById = catchAsync(async (req, res) => {
+  const result = await MedicineService.getMedicineById(req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Medicine fetched successful",
+    data: result,
+  });
+});
+
+const updateMedicine = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const payload = req.body;
+  const result = await MedicineService.updateMedicine(id, payload);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Medicine updated successful",
+    data: result,
+  });
+});
+
+export const MedicineController = {
+  addMedicine,
+  getAllMedicine,
+  getMedicineById,
+  updateMedicine,
+};
