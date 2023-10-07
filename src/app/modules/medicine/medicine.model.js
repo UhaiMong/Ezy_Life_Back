@@ -45,6 +45,9 @@ const MedicineSchema = new Schema(
     power: {
       type: String,
     },
+    strip: {
+      type: String,
+    },
   },
   {
     timestamps: true,
