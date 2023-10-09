@@ -9,13 +9,17 @@ function avatarUpload(req, res, next) {
     "Only .jpg, jpeg or .png format allowed!"
   );
 
-  // call the middleware function
-  upload.any()(req, res, (err) => {
+  // call the middleware function with single file field
+  upload.single("img")(req, res, (err) => {
     if (err) {
       throw new ApiError(500, err.message);
     } else {
-      const filenames = req.files.map((file) => file.filename);
-      req.image = filenames[0];
+      if (!req.file) {
+        // No file was uploaded
+        throw new ApiError(400, "No file selected");
+      }
+
+      req.image = req.file.filename;
 
       next();
     }
