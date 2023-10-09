@@ -11,4 +11,6 @@ router.post(
   BikeRentController.bookBikeRent
 );
 
+router.get("/", BikeRentController.getBikeBookings);
+
 export const BikeRentRoutes = router;
