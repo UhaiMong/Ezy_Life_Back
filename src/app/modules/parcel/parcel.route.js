@@ -11,4 +11,6 @@ router.post(
   ParcelController.bookParcel
 );
 
+router.get("/", ParcelController.getBookedParcel);
+
 export const ParcelRoutes = router;
