@@ -72,7 +72,7 @@ const updateBlog = async (id, payload) => {
 };
 
 const deleteBlog = async (id) => {
-  const result = await Blog.findByIdAndDelete(id);
+  const result = await Blog.findByIdAndDelete({ _id: id });
   return result;
 };
 

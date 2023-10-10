@@ -17,6 +17,7 @@ app.use(cookieParser());
 // access static file
 app.use(express.static("src/uploads"));
 app.use("/images", express.static("images"));
+app.use("/blogs", express.static("blogs"));
 
 app.use("/api/v1/", routers);
 
