@@ -37,4 +37,33 @@ const getBikeBookings = catchAsync(async (req, res) => {
   });
 });
 
-export const BikeRentController = { bookBikeRent, getBikeBookings };
+const getBikeBooking = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await BikeRentService.getBikeBooking(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
+
+const deleteBooking = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await BikeRentService.deleteBooking(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Rent deleted successful",
+    data: result,
+  });
+});
+
+export const BikeRentController = {
+  bookBikeRent,
+  getBikeBookings,
+  getBikeBooking,
+  deleteBooking,
+};

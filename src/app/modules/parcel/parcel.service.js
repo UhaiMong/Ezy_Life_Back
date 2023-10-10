@@ -7,7 +7,7 @@ const bookParcel = async (payload) => {
   return result;
 };
 
-const getBookedParcel = async (filters, paginationOption) => {
+const getBookedParcels = async (filters, paginationOption) => {
   const { searchTerm, ...filteredData } = filters;
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(paginationOption);
@@ -60,4 +60,19 @@ const getBookedParcel = async (filters, paginationOption) => {
   };
 };
 
-export const ParcelService = { bookParcel, getBookedParcel };
+const getBookedParcel = async (id) => {
+  const result = (await Parcel.findById({ _id: id })).populate("user");
+  return result;
+};
+
+const deleteParcel = async (id) => {
+  const result = await Parcel.findByIdAndDelete({ _id: id });
+  return result;
+};
+
+export const ParcelService = {
+  bookParcel,
+  getBookedParcels,
+  getBookedParcel,
+  deleteParcel,
+};

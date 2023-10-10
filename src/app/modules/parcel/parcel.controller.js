@@ -18,12 +18,12 @@ const bookParcel = catchAsync(async (req, res) => {
   });
 });
 
-const getBookedParcel = catchAsync(async (req, res) => {
+const getBookedParcels = catchAsync(async (req, res) => {
   const filters = pick(req.query, parcelFilterableField);
 
   const paginationOptions = pick(req.query, paginationFields);
 
-  const result = await ParcelService.getBookedParcel(
+  const result = await ParcelService.getBookedParcels(
     filters,
     paginationOptions
   );
@@ -31,10 +31,38 @@ const getBookedParcel = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Bike fetch successfully",
+    message: "Parcels fetch successfully",
     meta: result.meta,
     data: result.data,
   });
 });
 
-export const ParcelController = { bookParcel, getBookedParcel };
+const getBookedParcel = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await ParcelService.getBookedParcel(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Parcel fetch successful",
+    data: result,
+  });
+});
+const deleteParcel = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await ParcelService.deleteParcel(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Parcel deleted successful",
+    data: result,
+  });
+});
+
+export const ParcelController = {
+  bookParcel,
+  getBookedParcels,
+  getBookedParcel,
+  deleteParcel,
+};

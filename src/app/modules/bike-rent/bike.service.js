@@ -60,4 +60,18 @@ const getBikeBookings = async (filters, paginationOption) => {
   };
 };
 
-export const BikeRentService = { bookBikeRent, getBikeBookings };
+const getBikeBooking = async (id) => {
+  const result = await BikeRent.findById({ _id: id }).populate("user");
+  return result;
+};
+const deleteBooking = async (id) => {
+  const result = await BikeRent.findByIdAndDelete({ _id: id });
+  return result;
+};
+
+export const BikeRentService = {
+  bookBikeRent,
+  getBikeBookings,
+  getBikeBooking,
+  deleteBooking,
+};
