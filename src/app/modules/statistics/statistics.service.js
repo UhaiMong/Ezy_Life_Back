@@ -18,50 +18,66 @@ const getStatistic = async () => {
   return data;
 };
 const getDailyBooking = async () => {
-  const date = new Date();
-  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-  const bike = await BikeRent.aggregate([
+  const bikeRentData = await BikeRent.aggregate([
     {
       $match: {
-        createdAt: { $gte: lastYear },
-      },
-    },
-    {
-      $project: {
-        month: { $month: "$createdAt" },
-        total_amount: { $sum: "$total_amount" },
+        createdAt: { $gte: sevenDaysAgo },
       },
     },
     {
       $group: {
-        _id: "$month",
-        total_amount: { $sum: "$total_amount" },
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        bike_rent: { $sum: "$total_amount" },
       },
     },
   ]);
 
-  const parcel = await Parcel.aggregate([
+  const parcelData = await Parcel.aggregate([
     {
       $match: {
-        createdAt: { $gte: lastYear },
-      },
-    },
-    {
-      $project: {
-        month: { $month: "$createdAt" },
-        total_amount: { $sum: "$total_amount" },
+        createdAt: { $gte: sevenDaysAgo },
       },
     },
     {
       $group: {
-        _id: "$month",
-        total_amount: { $sum: "$total_amount" },
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        parcel: { $sum: "$total_amount" },
       },
     },
   ]);
 
-  const data = { parcel: parcel, bike: bike, medicine: [], product: [] };
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const combinedData = {};
+
+  daysOfWeek.forEach((day) => {
+    combinedData[day] = {
+      name: day,
+      bike_rent: 0,
+      parcel: 0,
+      medicine: 0,
+      product: 0,
+    };
+  });
+
+  function mergeData(sourceData, sourceKey) {
+    sourceData.forEach((item) => {
+      const day = moment(item._id).format("dddd").slice(0, 3);
+      const totalAmount = item[sourceKey];
+      if (combinedData[day]) {
+        combinedData[day][sourceKey] = totalAmount;
+      }
+    });
+  }
+
+  mergeData(bikeRentData, "bike_rent");
+  mergeData(parcelData, "parcel");
+
+  const data = Object.values(combinedData);
+
   return data;
 };
 
