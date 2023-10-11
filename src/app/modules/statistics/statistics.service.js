@@ -1,5 +1,6 @@
 import { BikeRent } from "../bike-rent/bike.model.js";
 import { Parcel } from "../parcel/parcel.model.js";
+import moment from "moment";
 
 const getStatistic = async () => {
   const bikeRentCount = await BikeRent.countDocuments();
@@ -16,7 +17,55 @@ const getStatistic = async () => {
 
   return data;
 };
+const getDailyBooking = async () => {
+  const date = new Date();
+  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+
+  const bike = await BikeRent.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: lastYear },
+      },
+    },
+    {
+      $project: {
+        month: { $month: "$createdAt" },
+        total_amount: { $sum: "$total_amount" },
+      },
+    },
+    {
+      $group: {
+        _id: "$month",
+        total_amount: { $sum: "$total_amount" },
+      },
+    },
+  ]);
+
+  const parcel = await Parcel.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: lastYear },
+      },
+    },
+    {
+      $project: {
+        month: { $month: "$createdAt" },
+        total_amount: { $sum: "$total_amount" },
+      },
+    },
+    {
+      $group: {
+        _id: "$month",
+        total_amount: { $sum: "$total_amount" },
+      },
+    },
+  ]);
+
+  const data = { parcel: parcel, bike: bike, medicine: [], product: [] };
+  return data;
+};
 
 export const StatisticService = {
   getStatistic,
+  getDailyBooking,
 };

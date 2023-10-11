@@ -2,16 +2,14 @@ import { Schema, model } from "mongoose";
 
 const statisticSchema = new Schema(
   {
-    service_name: {
-      type: String,
-      required: true,
-    },
-    service_count: {
-      type: String,
-    },
-    color: {
-      type: String,
-    },
+    service_name: String,
+    service_count: String,
+    color: String,
+    name: String,
+    bike_rent: String,
+    parcel: String,
+    medicine: String,
+    local_product: String,
   },
   {
     timestamps: true,
