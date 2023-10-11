@@ -4,6 +4,7 @@ import { BikeRentRoutes } from "../modules/bike-rent/bike.route.js";
 import { ParcelRoutes } from "../modules/parcel/parcel.route.js";
 import { BlogRoutes } from "../modules/blog/blog.route.js";
 import { MedicineRoutes } from "../modules/medicine/medicine.route.js";
+import { StatisticRoutes } from "../modules/statistics/statistics.route.js";
 
 const routers = express.Router();
 
@@ -27,6 +28,10 @@ const routerModule = [
   {
     path: "/medicine",
     route: MedicineRoutes,
+  },
+  {
+    path: "/statistic",
+    route: StatisticRoutes,
   },
 ];
 
