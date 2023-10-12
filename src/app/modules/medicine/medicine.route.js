@@ -10,7 +10,7 @@ router.get("/", MedicineController.getAllMedicine);
 
 router.get("/:id", MedicineController.getMedicineById);
 
-router.patch("/:id", avatarUpload, MedicineController.updateMedicine);
+router.patch("/:id", medicineImage, MedicineController.updateMedicine);
 
 router.delete("/:id", MedicineController.deleteMedicine);
 

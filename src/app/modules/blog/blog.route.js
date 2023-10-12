@@ -1,8 +1,5 @@
 import express from "express";
-import { BlogValidation } from "./blog.validation.js";
 import { BlogController } from "./blog.controller.js";
-import validateRequest from "../../middleware/validationRequest.js";
-import avatarUpload from "../../middleware/uploader/uploadImage.js";
 import blogImagesUploader from "../../middleware/uploader/blogImagesUploader.js";
 
 const router = express.Router();
