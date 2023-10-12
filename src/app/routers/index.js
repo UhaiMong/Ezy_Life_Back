@@ -5,6 +5,7 @@ import { ParcelRoutes } from "../modules/parcel/parcel.route.js";
 import { BlogRoutes } from "../modules/blog/blog.route.js";
 import { MedicineRoutes } from "../modules/medicine/medicine.route.js";
 import { StatisticRoutes } from "../modules/statistics/statistics.route.js";
+import { BannerRoutes } from "../modules/banner/banner.route.js";
 
 const routers = express.Router();
 
@@ -32,6 +33,10 @@ const routerModule = [
   {
     path: "/statistic",
     route: StatisticRoutes,
+  },
+  {
+    path: "/banner",
+    route: BannerRoutes,
   },
 ];
 

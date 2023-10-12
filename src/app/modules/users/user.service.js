@@ -89,7 +89,7 @@ const updateUser = async (id, payload) => {
 };
 
 const deleteUser = async (id) => {
-  const result = await User.findByIdAndDelete(id);
+  const result = await User.findByIdAndDelete({ _id: id });
   return result;
 };
 

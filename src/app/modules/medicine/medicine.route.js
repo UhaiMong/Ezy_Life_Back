@@ -1,10 +1,10 @@
 import express from "express";
 import { MedicineController } from "./medicine.controller.js";
-import avatarUpload from "../../middleware/uploader/uploadImage.js";
+import medicineImage from "../../middleware/uploader/medicineImage.js";
 
 const router = express.Router();
 
-router.post("/add-medicine", avatarUpload, MedicineController.addMedicine);
+router.post("/add-medicine", medicineImage, MedicineController.addMedicine);
 
 router.get("/", MedicineController.getAllMedicine);
 
