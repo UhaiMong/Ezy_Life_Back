@@ -3,7 +3,7 @@ import uploader from "../../../utils/fileUpload.js";
 
 function medicineImage(req, res, next) {
   const upload = uploader(
-    "images",
+    "medicines",
     ["image/jpeg", "image/jpg", "image/png"],
     1000000,
     "Only .jpg, jpeg or .png format allowed!"
