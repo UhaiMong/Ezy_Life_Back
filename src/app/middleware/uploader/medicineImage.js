@@ -1,9 +1,13 @@
 import ApiError from "../../../errors/ApiError.js";
 import uploader from "../../../utils/fileUpload.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-function medicineImage(req, res, next) {
+function uploadImage(req, res, next) {
   const upload = uploader(
-    "images",
+    "medicines",
     ["image/jpeg", "image/jpg", "image/png"],
     1000000,
     "Only .jpg, jpeg or .png format allowed!"
@@ -15,15 +19,33 @@ function medicineImage(req, res, next) {
       throw new ApiError(500, err.message);
     } else {
       if (!req.file) {
-        // No file was uploaded
-        throw new ApiError(400, "No file selected");
+        next();
+      } else {
+        req.image = req.file.filename;
+        next();
       }
-
-      req.image = req.file.filename;
-
-      next();
     }
   });
 }
 
-export default medicineImage;
+// Middleware to delete an image
+function deleteImage(image) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  // Check if req.image exists and is a valid image filename
+  if (image) {
+    const imagePath = path.join(
+      __dirname,
+      "../../..",
+      "./uploads/medicines/",
+      image
+    );
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error(`Error deleting file: ${err}`);
+      }
+    });
+  }
+}
+
+export const MedicineImage = { uploadImage, deleteImage };

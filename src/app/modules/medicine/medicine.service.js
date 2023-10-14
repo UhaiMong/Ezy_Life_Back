@@ -1,6 +1,9 @@
+import httpStatus from "http-status";
+import ApiError from "../../../errors/ApiError.js";
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { medicineSearchableField } from "./medicine.constants.js";
 import { Medicine } from "./medicine.model.js";
+import { MedicineImage } from "../../middleware/uploader/medicineImage.js";
 
 const addMedicine = async (payload) => {
   const result = await Medicine.create(payload);
@@ -65,7 +68,16 @@ const getMedicineById = async (id) => {
 };
 
 const updateMedicine = async (id, payload) => {
-  console.log(payload);
+  const medicine = await Medicine.findById({ _id: id });
+
+  if (!medicine) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Medicine Not Found");
+  }
+
+  if (payload?.img && medicine?.img) {
+    MedicineImage.deleteImage(medicine?.img);
+  }
+
   const result = await Medicine.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
   });
@@ -73,6 +85,16 @@ const updateMedicine = async (id, payload) => {
 };
 
 const deleteMedicine = async (id) => {
+  const medicine = await Medicine.findById({ _id: id });
+
+  if (!medicine) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Medicine Not Found");
+  }
+
+  if (medicine.img) {
+    MedicineImage.deleteImage(medicine.img);
+  }
+
   const result = await Medicine.findOneAndDelete({ _id: id });
   return result;
 };

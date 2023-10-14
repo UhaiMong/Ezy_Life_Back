@@ -45,8 +45,9 @@ const getMedicineById = catchAsync(async (req, res) => {
 });
 
 const updateMedicine = catchAsync(async (req, res) => {
+  const img = req?.image;
   const id = req.params.id;
-  const payload = req.body;
+  const payload = img ? { ...req.body, img } : req.body;
   const result = await MedicineService.updateMedicine(id, payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
