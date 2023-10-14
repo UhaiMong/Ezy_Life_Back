@@ -1,6 +1,6 @@
 import express from "express";
 import { CategoryImage } from "../../../middleware/uploader/categoryImage.js";
-import { CategoryController } from "./blog.controller.js";
+import { CategoryController } from "./category.controller.js";
 
 const router = express.Router();
 
