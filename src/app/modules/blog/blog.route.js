@@ -1,10 +1,10 @@
 import express from "express";
 import { BlogController } from "./blog.controller.js";
-import blogImagesUploader from "../../middleware/uploader/blogImagesUploader.js";
+import { BlogImage } from "../../middleware/uploader/blogImagesUploader.js";
 
 const router = express.Router();
 
-router.post("/create-blog", blogImagesUploader, BlogController.addBlog);
+router.post("/create-blog", BlogImage.uploadImage, BlogController.addBlog);
 
 router.get("/", BlogController.getBlog);
 

@@ -7,7 +7,6 @@ import { blogFilterableField } from "./blog.constant.js";
 import { paginationFields } from "../../../constants/pagination.js";
 
 const addBlog = catchAsync(async (req, res) => {
-  console.log(req.body);
   const author_img = req.author_img;
   const image = req.image;
   const { ...blogData } = req.body;
