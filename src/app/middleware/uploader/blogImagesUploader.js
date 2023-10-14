@@ -1,5 +1,7 @@
 import ApiError from "../../../errors/ApiError.js";
 import uploader from "../../../utils/fileUpload.js";
+import fs from "fs";
+import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -22,13 +24,20 @@ function uploadImage(req, res, next) {
       const author_img = req.files["author_img"];
       const image = req.files["image"];
 
-      if (!author_img || !image) {
+      if (!author_img && !image) {
         next();
       } else {
-        req.author_img = author_img[0].filename;
-        req.image = image[0].filename;
-
-        next();
+        if (author_img && image) {
+          req.author_img = author_img[0].filename;
+          req.image = image[0].filename;
+          next();
+        } else if (image) {
+          req.image = image[0].filename;
+          next();
+        } else if (author_img) {
+          req.author_img = author_img[0].filename;
+          next();
+        }
       }
     }
   });

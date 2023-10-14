@@ -10,7 +10,7 @@ router.get("/", BlogController.getBlog);
 
 router.get("/:id", BlogController.getSingleBlog);
 
-router.patch("/:id", BlogController.updateBlog);
+router.patch("/:id", BlogImage.uploadImage, BlogController.updateBlog);
 
 router.delete("/:id", BlogController.deleteBlog);
 

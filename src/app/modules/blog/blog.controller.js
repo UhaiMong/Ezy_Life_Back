@@ -48,7 +48,19 @@ const getSingleBlog = catchAsync(async (req, res) => {
 });
 
 const updateBlog = catchAsync(async (req, res) => {
-  const result = await BlogService.updateBlog(req.params.id, req.body);
+  const author_img = req.author_img;
+  const image = req.image;
+  console.log(author_img, image);
+  const payload =
+    author_img && image
+      ? { ...req.body, author_img, image }
+      : image
+      ? { ...req.body, image }
+      : author_img
+      ? { ...req.body, author_img }
+      : req.body;
+
+  const result = await BlogService.updateBlog(req.params.id, payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
