@@ -1,3 +1,8 @@
-export const medicineFilterableField = ["searchTerm", "cat", "name", "group"];
+export const mediatorFilterableField = [
+  "searchTerm",
+  "name",
+  "description",
+  "categoryFlag",
+];
 
-export const medicineSearchableField = ["name", "cat", "group"];
+export const mediatorSearchableField = ["name", "description", "categoryFlag"];

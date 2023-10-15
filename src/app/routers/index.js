@@ -7,6 +7,7 @@ import { MedicineRoutes } from "../modules/medicine/medicine.route.js";
 import { StatisticRoutes } from "../modules/statistics/statistics.route.js";
 import { BannerRoutes } from "../modules/banner/banner.route.js";
 import { CategoryRoutes } from "../modules/mediator/category/category.route.js";
+import { MediatorRoutes } from "../modules/mediator/product/product.route.js";
 
 const routers = express.Router();
 
@@ -42,6 +43,10 @@ const routerModule = [
   {
     path: "/category",
     route: CategoryRoutes,
+  },
+  {
+    path: "/product",
+    route: MediatorRoutes,
   },
 ];
 

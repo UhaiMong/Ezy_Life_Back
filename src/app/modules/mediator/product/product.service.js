@@ -1,25 +1,23 @@
 import httpStatus from "http-status";
-import ApiError from "../../../errors/ApiError.js";
-import { paginationHelper } from "../../../helpers/paginationHelpers.js";
-import { medicineSearchableField } from "./medicine.constants.js";
-import { Medicine } from "./medicine.model.js";
-import { MedicineImage } from "../../middleware/uploader/medicineImage.js";
+import { Mediator } from "./product.model.js";
+import { paginationHelper } from "../../../../helpers/paginationHelpers.js";
+import { mediatorSearchableField } from "./product.constants.js";
+import { MediatorImage } from "../../../middleware/uploader/mediatorImage.js";
 
-const addMedicine = async (payload) => {
-  const result = await Medicine.create(payload);
+const addProduct = async (payload) => {
+  const result = await Mediator.create(payload);
   return result;
 };
 
-const getAllMedicine = async (filters, paginationOption) => {
+const getAllProduct = async (filters, paginationOption) => {
   const { searchTerm, ...filteredData } = filters;
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(paginationOption);
 
   const andConditions = [];
-
   if (searchTerm) {
     andConditions.push({
-      $or: medicineSearchableField.map((field) => ({
+      $or: mediatorSearchableField.map((field) => ({
         [field]: {
           $regex: searchTerm,
           $options: "i",
@@ -45,12 +43,13 @@ const getAllMedicine = async (filters, paginationOption) => {
   const whereCondition =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await Medicine.find(whereCondition)
+  const result = await Mediator.find(whereCondition)
+    .populate("category")
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
 
-  const total = await Medicine.countDocuments(whereCondition);
+  const total = await Mediator.countDocuments(whereCondition);
 
   return {
     meta: {
@@ -62,47 +61,47 @@ const getAllMedicine = async (filters, paginationOption) => {
   };
 };
 
-const getMedicineById = async (id) => {
-  const result = await Medicine.findById(id);
+const getProductById = async (id) => {
+  const result = await Mediator.findById({ _id: id });
   return result;
 };
 
-const updateMedicine = async (id, payload) => {
-  const medicine = await Medicine.findById({ _id: id });
+const updateProduct = async (id, payload) => {
+  const product = await Mediator.findById({ _id: id });
 
-  if (!medicine) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Medicine Not Found");
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product Not Found");
   }
 
-  if (payload?.img && medicine?.img) {
-    MedicineImage.deleteImage(medicine?.img);
+  if (payload?.image && product?.image) {
+    MediatorImage.deleteImage(product?.image);
   }
 
-  const result = await Medicine.findByIdAndUpdate({ _id: id }, payload, {
+  const result = await Mediator.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
   });
   return result;
 };
 
-const deleteMedicine = async (id) => {
-  const medicine = await Medicine.findById({ _id: id });
+const deleteProduct = async (id) => {
+  const product = await Mediator.findById({ _id: id });
 
-  if (!medicine) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Medicine Not Found");
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Mediator Not Found");
   }
 
-  if (medicine.img) {
-    MedicineImage.deleteImage(medicine.img);
+  if (product.image) {
+    MediatorImage.deleteImage(product.image);
   }
 
-  const result = await Medicine.findOneAndDelete({ _id: id });
+  const result = await Mediator.findOneAndDelete({ _id: id });
   return result;
 };
 
-export const MedicineService = {
-  addMedicine,
-  getAllMedicine,
-  getMedicineById,
-  updateMedicine,
-  deleteMedicine,
+export const MediatorService = {
+  addProduct,
+  getAllProduct,
+  getProductById,
+  updateProduct,
+  deleteProduct,
 };

@@ -1,25 +1,24 @@
 import express from "express";
-import { MedicineController } from "./medicine.controller.js";
-import { MedicineImage } from "../../middleware/uploader/medicineImage.js";
-
+import { MediatorImage } from "../../../middleware/uploader/mediatorImage.js";
+import { MediatorController } from "./product.controller.js";
 const router = express.Router();
 
 router.post(
   "/add-product",
-  MedicineImage.uploadImage,
-  MedicineController.addMedicine
+  MediatorImage.uploadImage,
+  MediatorController.addProduct
 );
 
-router.get("/", MedicineController.getAllMedicine);
+router.get("/", MediatorController.getAllProduct);
 
-router.get("/:id", MedicineController.getMedicineById);
+router.get("/:id", MediatorController.getProductById);
 
 router.patch(
   "/:id",
-  MedicineImage.uploadImage,
-  MedicineController.updateMedicine
+  MediatorImage.uploadImage,
+  MediatorController.updateProduct
 );
 
-router.delete("/:id", MedicineController.deleteMedicine);
+router.delete("/:id", MediatorController.deleteProduct);
 
-export const MedicineRoutes = router;
+export const MediatorRoutes = router;

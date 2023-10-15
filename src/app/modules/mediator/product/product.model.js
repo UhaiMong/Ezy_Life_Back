@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { Category } from "../category/category.model.js";
 
 const MediatorSchema = new Schema(
   {
@@ -27,6 +28,9 @@ const MediatorSchema = new Schema(
     info: {
       type: String,
     },
+    categoryFlag: {
+      type: String,
+    },
     category: {
       type: Schema.Types.ObjectId,
       ref: "Category",
@@ -45,6 +49,22 @@ MediatorSchema.pre("save", function (next) {
     this.discount = Math.round(percentageDiscount * 100) / 100;
   } else {
     this.discount = null;
+  }
+
+  next();
+});
+
+MediatorSchema.pre("save", async function (next) {
+  if (this.isModified("category")) {
+    try {
+      const category = await Category.findById(this.category);
+      console.log(category);
+      if (category) {
+        this.categoryFlag = category.name;
+      }
+    } catch (error) {
+      console.error("Error populating category:", error);
+    }
   }
 
   next();
