@@ -1,7 +1,11 @@
 import ApiError from "../../../errors/ApiError.js";
 import uploader from "../../../utils/fileUpload.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-function blogImageUploader(req, res, next) {
+function uploadImage(req, res, next) {
   const upload = uploader(
     "blogs",
     ["image/jpeg", "image/jpg", "image/png"],
@@ -20,17 +24,43 @@ function blogImageUploader(req, res, next) {
       const author_img = req.files["author_img"];
       const image = req.files["image"];
 
-      if (!author_img || !image) {
-        // One or both files were not uploaded
-        throw new ApiError(400, "Both files are required");
+      if (!author_img && !image) {
+        next();
+      } else {
+        if (author_img && image) {
+          req.author_img = author_img[0].filename;
+          req.image = image[0].filename;
+          next();
+        } else if (image) {
+          req.image = image[0].filename;
+          next();
+        } else if (author_img) {
+          req.author_img = author_img[0].filename;
+          next();
+        }
       }
-
-      req.author_img = author_img[0].filename;
-      req.image = image[0].filename;
-
-      next();
     }
   });
 }
 
-export default blogImageUploader;
+// Middleware to delete an image
+function deleteImage(image) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  // Check if req.image exists and is a valid image filename
+  if (image) {
+    const imagePath = path.join(
+      __dirname,
+      "../../..",
+      "./uploads/blogs/",
+      image
+    );
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error(`Error deleting file: ${err}`);
+      }
+    });
+  }
+}
+
+export const BlogImage = { uploadImage, deleteImage };

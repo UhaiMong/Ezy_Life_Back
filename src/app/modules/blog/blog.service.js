@@ -1,6 +1,9 @@
+import ApiError from "../../../errors/ApiError.js";
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
+import { BlogImage } from "../../middleware/uploader/blogImagesUploader.js";
 import { blogSearchableField } from "./blog.constant.js";
 import { Blog } from "./blog.model.js";
+import httpStatus from "http-status";
 
 const addBlog = async (payload) => {
   const result = await Blog.create(payload);
@@ -65,6 +68,20 @@ const getSingleBlog = async (id) => {
 };
 
 const updateBlog = async (id, payload) => {
+  const blog = await Blog.findById({ _id: id });
+
+  if (!blog) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Blog not found");
+  }
+
+  if (payload.author_img && blog.author_img) {
+    BlogImage.deleteImage(blog.author_img);
+  }
+
+  if (payload.image && blog.image) {
+    BlogImage.deleteImage(blog.image);
+  }
+
   const result = await Blog.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
   });
@@ -72,6 +89,20 @@ const updateBlog = async (id, payload) => {
 };
 
 const deleteBlog = async (id) => {
+  const blog = await Blog.findById({ _id: id });
+
+  if (!blog) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Blog not found");
+  }
+
+  if (blog.author_img) {
+    BlogImage.deleteImage(blog.author_img);
+  }
+
+  if (blog.image) {
+    BlogImage.deleteImage(blog.image);
+  }
+
   const result = await Blog.findByIdAndDelete({ _id: id });
   return result;
 };

@@ -7,14 +7,14 @@ import { dirname } from "path";
 
 function uploadImage(req, res, next) {
   const upload = uploader(
-    "medicines",
+    "categories",
     ["image/jpeg", "image/jpg", "image/png"],
     1000000,
     "Only .jpg, jpeg or .png format allowed!"
   );
 
   // call the middleware function with single file field
-  upload.single("img")(req, res, (err) => {
+  upload.single("image")(req, res, (err) => {
     if (err) {
       throw new ApiError(500, err.message);
     } else {
@@ -37,7 +37,7 @@ function deleteImage(image) {
     const imagePath = path.join(
       __dirname,
       "../../..",
-      "./uploads/medicines/",
+      "./uploads/categories/",
       image
     );
     fs.unlink(imagePath, (err) => {
@@ -48,4 +48,4 @@ function deleteImage(image) {
   }
 }
 
-export const MedicineImage = { uploadImage, deleteImage };
+export const CategoryImage = { uploadImage, deleteImage };

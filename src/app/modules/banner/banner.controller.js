@@ -47,7 +47,10 @@ const getSingleBanner = catchAsync(async (req, res) => {
 });
 
 const updateBanner = catchAsync(async (req, res) => {
-  const result = await BannerService.updateBanner(req.params.id, req.body);
+  const banner = req?.image;
+  const { ...bannerData } = req.body;
+  const payload = banner ? { ...bannerData, banner } : bannerData;
+  const result = await BannerService.updateBanner(req.params.id, payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

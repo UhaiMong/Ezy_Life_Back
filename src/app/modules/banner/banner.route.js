@@ -1,10 +1,10 @@
 import express from "express";
 import { BannerController } from "./banner.controller.js";
-import uploadBanner from "../../middleware/uploader/uploadBanner.js";
+import { BannerImage } from "../../middleware/uploader/uploadBanner.js";
 
 const router = express.Router();
 
-router.post("/create", uploadBanner, BannerController.createBanner);
+router.post("/create", BannerImage.uploadImage, BannerController.createBanner);
 
 // get all users
 router.get("/", BannerController.getAllBanners);
@@ -13,7 +13,7 @@ router.get("/", BannerController.getAllBanners);
 router.get("/:id", BannerController.getSingleBanner);
 
 // update user
-router.put("/:id", BannerController.updateBanner);
+router.patch("/:id", BannerImage.uploadImage, BannerController.updateBanner);
 
 // delete user
 router.delete("/:id", BannerController.deleteBanner);

@@ -1,6 +1,9 @@
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { Banner } from "./banner.model.js";
 import { bannersSearchableField } from "./banner.constant.js";
+import ApiError from "../../../errors/ApiError.js";
+import httpStatus from "http-status";
+import { BannerImage } from "../../middleware/uploader/uploadBanner.js";
 
 const createBanner = async (payload) => {
   const result = await Banner.create(payload);
@@ -65,6 +68,16 @@ const getSingleBanner = async (id) => {
 };
 
 const updateBanner = async (id, payload) => {
+  const banner = await Banner.findById({ _id: id });
+
+  if (!banner) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Banner Not Found");
+  }
+
+  if (payload?.banner && banner?.banner) {
+    BannerImage.deleteImage(banner?.banner);
+  }
+
   const result = await Banner.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });
@@ -72,6 +85,16 @@ const updateBanner = async (id, payload) => {
 };
 
 const deleteBanner = async (id) => {
+  const banner = await Banner.findById({ _id: id });
+
+  if (!banner) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Banner not found");
+  }
+
+  if (banner.banner) {
+    BannerImage.deleteImage(banner.banner);
+  }
+
   const result = await Banner.findByIdAndDelete({ _id: id });
   return result;
 };
