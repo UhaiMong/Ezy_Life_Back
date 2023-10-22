@@ -10,5 +10,9 @@ router.get("/getChartData", StatisticController.getChartData);
 router.get("/getChartBoxProduct", StatisticController.chartBoxProduct);
 router.get("/getChartBoxMedicine", StatisticController.chartBoxMedicine);
 router.get("/totalSold", StatisticController.chartBoxTotalSold);
+router.get(
+  "/visitedUser",
+  StatisticController.calculateTotalVisitsLast12Months
+);
 
 export const StatisticRoutes = router;

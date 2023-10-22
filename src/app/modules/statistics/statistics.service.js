@@ -349,6 +349,78 @@ const chartBoxTotalSold = async () => {
   return totalAmountSum;
 };
 
+const getMonthName = (month) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return months[month - 1];
+};
+
+const calculateTotalVisitsLast12Months = async () => {
+  const twelveMonthsAgo = new Date();
+  twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+  try {
+    const result = await User.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: twelveMonthsAgo },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: { $month: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          month: "$_id.month",
+          count: 1,
+        },
+      },
+    ]);
+
+    const visitsMap = new Map(
+      result.map((entry) => [entry.month, entry.count])
+    );
+
+    const chartData = [];
+    for (let month = 1; month <= 12; month++) {
+      chartData.push({
+        name: getMonthName(month),
+        visit: visitsMap.get(month) || 1,
+      });
+    }
+
+    const barChartBoxVisit = {
+      title: "Total Visit",
+      color: "#FF8042",
+      dataKey: "visit",
+      chartData: chartData,
+    };
+
+    return barChartBoxVisit;
+  } catch (error) {
+    console.error("Error calculating total visits:", error);
+    throw error;
+  }
+};
+
 export const StatisticService = {
   getStatistic,
   getDailyBooking,
@@ -357,4 +429,5 @@ export const StatisticService = {
   chartBoxProduct,
   chartBoxMedicine,
   chartBoxTotalSold,
+  calculateTotalVisitsLast12Months,
 };

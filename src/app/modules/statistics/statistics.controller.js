@@ -76,6 +76,16 @@ const chartBoxTotalSold = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const calculateTotalVisitsLast12Months = catchAsync(async (req, res) => {
+  const result = await StatisticService.calculateTotalVisitsLast12Months();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
 
 export const StatisticController = {
   getStatistic,
@@ -85,4 +95,5 @@ export const StatisticController = {
   chartBoxProduct,
   chartBoxMedicine,
   chartBoxTotalSold,
+  calculateTotalVisitsLast12Months,
 };
