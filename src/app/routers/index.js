@@ -9,6 +9,7 @@ import { BannerRoutes } from "../modules/banner/banner.route.js";
 import { CategoryRoutes } from "../modules/mediator/category/category.route.js";
 import { MediatorRoutes } from "../modules/mediator/product/product.route.js";
 import { PrescriptionRoutes } from "../modules/prescription/prescription.route.js";
+import { MedicineOrderRoutes } from "../modules/medicineOrder/medicineOrder.route.js";
 
 const routers = express.Router();
 
@@ -52,6 +53,10 @@ const routerModule = [
   {
     path: "/prescription",
     route: PrescriptionRoutes,
+  },
+  {
+    path: "/order-medicine",
+    route: MedicineOrderRoutes,
   },
 ];
 

@@ -1,9 +1,9 @@
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
-import { medicineSearchableField } from "./medicine.constants.js";
-import { Order } from "./order.model.js";
+import { medicineSearchableField } from "../medicine/medicine.constants.js";
+import { MedicineOrder } from "./medicineOrder.model.js";
 
 const addOrder = async (payload) => {
-  const result = await Order.create(payload);
+  const result = await MedicineOrder.create(payload);
   return result;
 };
 
@@ -42,12 +42,12 @@ const getAllOrder = async (filters, paginationOption) => {
   const whereCondition =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await Order.find(whereCondition)
+  const result = await MedicineOrder.find(whereCondition)
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
 
-  const total = await Order.countDocuments(whereCondition);
+  const total = await MedicineOrder.countDocuments(whereCondition);
 
   return {
     meta: {
@@ -60,23 +60,23 @@ const getAllOrder = async (filters, paginationOption) => {
 };
 
 const getOrderById = async (id) => {
-  const result = await Order.findById(id);
+  const result = await MedicineOrder.findById(id);
   return result;
 };
 
 const updateOrder = async (id, payload) => {
-  const result = await Order.findByIdAndUpdate({ _id: id }, payload, {
+  const result = await MedicineOrder.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
   });
   return result;
 };
 
 const deleteOrder = async (id) => {
-  const result = await Order.findOneAndDelete({ _id: id });
+  const result = await MedicineOrder.findOneAndDelete({ _id: id });
   return result;
 };
 
-export const OrderService = {
+export const MedicineOrderService = {
   addOrder,
   getAllOrder,
   getOrderById,
