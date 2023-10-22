@@ -3,6 +3,8 @@ import { BikeRent } from "../bike-rent/bike.model.js";
 import { Parcel } from "../parcel/parcel.model.js";
 import moment from "moment";
 import httpStatus from "http-status";
+import { MedicineOrder } from "../medicineOrder/medicineOrder.model.js";
+import { MediatorOrder } from "../mediatorOrder/mediatorOrder.model.js";
 
 const getStatistic = async () => {
   const bikeRentCount = await BikeRent.countDocuments();
@@ -93,6 +95,14 @@ const latestTransaction = async () => {
       .sort({ createdAt: -1 })
       .limit(2)
       .populate("user");
+    const lastTwoMedicineTransaction = await MedicineOrder.find()
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate("user");
+    const lastTwoProductTransaction = await MediatorOrder.find()
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate("user");
 
     const bikeTransactionData = lastTwoBikeTransaction.map((transaction) => ({
       id: transaction._id,
@@ -114,9 +124,31 @@ const latestTransaction = async () => {
       })
     );
 
-    const combinedTransactionData = bikeTransactionData.concat(
-      parcelTransactionData
+    const medicineTransactionData = lastTwoMedicineTransaction.map(
+      (transaction) => ({
+        id: transaction._id,
+        email: transaction.user.email,
+        photoURL: transaction.user.photoURL,
+        name: transaction.user.name,
+        total_amount: transaction.totalPrice,
+        transaction: "medicine",
+      })
     );
+    const productTransactionData = lastTwoProductTransaction.map(
+      (transaction) => ({
+        id: transaction._id,
+        email: transaction.user.email,
+        photoURL: transaction.user.photoURL,
+        name: transaction.user.name,
+        total_amount: transaction.totalPrice,
+        transaction: "product",
+      })
+    );
+
+    const combinedTransactionData = bikeTransactionData
+      .concat(parcelTransactionData)
+      .concat(medicineTransactionData)
+      .concat(productTransactionData);
 
     return combinedTransactionData;
   } catch (error) {
