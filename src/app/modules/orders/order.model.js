@@ -19,9 +19,23 @@ const OrderSchema = new Schema(
     },
     paymentStatus: {
       type: String,
+      default: "pending",
     },
     shippingStatus: {
       type: String,
+      default: "pending",
+    },
+    phoneNumber: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    totalPrice: {
+      type: Number,
+    },
+    deliveryCharge: {
+      type: Number,
     },
   },
   {
