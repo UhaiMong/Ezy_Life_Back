@@ -25,7 +25,19 @@ const getDailyBooking = catchAsync(async (req, res) => {
   });
 });
 
+const latestTransaction = catchAsync(async (req, res) => {
+  const result = await StatisticService.latestTransaction();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
+
 export const StatisticController = {
   getStatistic,
   getDailyBooking,
+  latestTransaction,
 };

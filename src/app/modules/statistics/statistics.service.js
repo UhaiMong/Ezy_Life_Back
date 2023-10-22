@@ -1,6 +1,8 @@
+import ApiError from "../../../errors/ApiError.js";
 import { BikeRent } from "../bike-rent/bike.model.js";
 import { Parcel } from "../parcel/parcel.model.js";
 import moment from "moment";
+import httpStatus from "http-status";
 
 const getStatistic = async () => {
   const bikeRentCount = await BikeRent.countDocuments();
@@ -81,7 +83,49 @@ const getDailyBooking = async () => {
   return data;
 };
 
+const latestTransaction = async () => {
+  try {
+    const lastTwoBikeTransaction = await BikeRent.find()
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate("user");
+    const lastTwoParcelTransaction = await Parcel.find()
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate("user");
+
+    const bikeTransactionData = lastTwoBikeTransaction.map((transaction) => ({
+      id: transaction._id,
+      email: transaction.user.email,
+      photoURL: transaction.user.photoURL,
+      name: transaction.user.name,
+      total_amount: transaction.total_amount,
+      transaction: "bike",
+    }));
+
+    const parcelTransactionData = lastTwoParcelTransaction.map(
+      (transaction) => ({
+        id: transaction._id,
+        email: transaction.user.email,
+        photoURL: transaction.user.photoURL,
+        name: transaction.user.name,
+        total_amount: transaction.total_amount,
+        transaction: "parcel",
+      })
+    );
+
+    const combinedTransactionData = bikeTransactionData.concat(
+      parcelTransactionData
+    );
+
+    return combinedTransactionData;
+  } catch (error) {
+    throw new ApiError(httpStatus.BAD_REQUEST);
+  }
+};
+
 export const StatisticService = {
   getStatistic,
   getDailyBooking,
+  latestTransaction,
 };
