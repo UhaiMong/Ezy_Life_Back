@@ -5,6 +5,9 @@ import moment from "moment";
 import httpStatus from "http-status";
 import { MedicineOrder } from "../medicineOrder/medicineOrder.model.js";
 import { MediatorOrder } from "../mediatorOrder/mediatorOrder.model.js";
+import { User } from "../users/user.model.js";
+import { Mediator } from "../mediator/product/product.model.js";
+import { Medicine } from "../medicine/medicine.model.js";
 
 const getStatistic = async () => {
   const bikeRentCount = await BikeRent.countDocuments();
@@ -185,8 +188,173 @@ const latestTransaction = async () => {
   }
 };
 
+const getChartData = async () => {
+  const totalUsers = await User.countDocuments();
+
+  const chartData = [
+    { name: "Sun", users: 0 },
+    { name: "Mon", users: 0 },
+    { name: "Tue", users: 0 },
+    { name: "Wed", users: 0 },
+    { name: "Thu", users: 0 },
+    { name: "Fri", users: 0 },
+    { name: "Sat", users: 0 },
+  ];
+
+  const usersByDay = await User.aggregate([
+    {
+      $group: {
+        _id: { $dayOfWeek: "$createdAt" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  usersByDay.forEach((day) => {
+    const dayOfWeek = day._id === 1 ? 7 : day._id - 1;
+    chartData[dayOfWeek - 1].users = day.count;
+  });
+
+  const percentage =
+    (totalUsers / chartData.reduce((sum, day) => sum + day.users, 0)) * 100;
+
+  const chartBoxUser = {
+    color: "#8884d8",
+    icon: "/userIcon.svg",
+    title: "Total Users",
+    number: totalUsers.toString(),
+    dataKey: "users",
+    percentage: Math.round(percentage),
+    chartData,
+  };
+  return chartBoxUser;
+};
+
+const chartBoxProduct = async () => {
+  const totalProducts = await Mediator.countDocuments();
+
+  const chartData = [
+    { name: "Sun", products: 0 },
+    { name: "Mon", products: 0 },
+    { name: "Tue", products: 0 },
+    { name: "Wed", products: 0 },
+    { name: "Thu", products: 0 },
+    { name: "Fri", products: 0 },
+    { name: "Sat", products: 0 },
+  ];
+
+  const usersByDay = await Mediator.aggregate([
+    {
+      $group: {
+        _id: { $dayOfWeek: "$createdAt" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  usersByDay.forEach((day) => {
+    const dayOfWeek = day._id === 1 ? 7 : day._id - 1;
+    chartData[dayOfWeek - 1].products = day.count;
+  });
+
+  const percentage =
+    (totalProducts / chartData.reduce((sum, day) => sum + day.products, 0)) *
+    100;
+
+  const chartBoxUser = {
+    color: "skyblue",
+    icon: "/productIcon.svg",
+    title: "Total Products",
+    number: totalProducts.toString(),
+    dataKey: "products",
+    percentage: Math.round(percentage),
+    chartData,
+  };
+  return chartBoxUser;
+};
+const chartBoxMedicine = async () => {
+  const totalMedicines = await Medicine.countDocuments();
+
+  const chartData = [
+    { name: "Sun", medicines: 0 },
+    { name: "Mon", medicines: 0 },
+    { name: "Tue", medicines: 0 },
+    { name: "Wed", medicines: 0 },
+    { name: "Thu", medicines: 0 },
+    { name: "Fri", medicines: 0 },
+    { name: "Sat", medicines: 0 },
+  ];
+
+  const usersByDay = await Medicine.aggregate([
+    {
+      $group: {
+        _id: { $dayOfWeek: "$createdAt" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  usersByDay.forEach((day) => {
+    const dayOfWeek = day._id === 1 ? 7 : day._id - 1;
+    chartData[dayOfWeek - 1].medicines = day.count;
+  });
+
+  const percentage =
+    (totalMedicines / chartData.reduce((sum, day) => sum + day.medicines, 0)) *
+    100;
+
+  const chartBoxUser = {
+    color: "teal",
+    icon: "/revenueIcon.svg",
+    title: "Total Medicines",
+    number: totalMedicines.toString(),
+    dataKey: "medicines",
+    percentage: Math.round(percentage),
+    chartData,
+  };
+  return chartBoxUser;
+};
+const chartBoxTotalSold = async () => {
+  const result = await MedicineOrder.aggregate([
+    { $group: { _id: null, total: { $sum: "$totalPrice" } } },
+  ]);
+
+  const medicineTotalAmount = result[0].total;
+
+  const mediatorResult = await MediatorOrder.aggregate([
+    { $group: { _id: null, total: { $sum: "$totalPrice" } } },
+  ]);
+
+  const mediatorTotalAmount = mediatorResult[0].total;
+
+  const bikeRentResult = await BikeRent.aggregate([
+    { $group: { _id: null, total: { $sum: "$total_amount" } } },
+  ]);
+
+  const bikeRentTotalAmount = bikeRentResult[0].total;
+
+  const parcelResult = await Parcel.aggregate([
+    { $group: { _id: null, total: { $sum: "$total_amount" } } },
+  ]);
+
+  const parcelTotalAmount = parcelResult[0].total;
+
+  // Calculate the sum of total amounts from all collections
+  const totalAmountSum =
+    medicineTotalAmount +
+    mediatorTotalAmount +
+    bikeRentTotalAmount +
+    parcelTotalAmount;
+
+  return totalAmountSum;
+};
+
 export const StatisticService = {
   getStatistic,
   getDailyBooking,
   latestTransaction,
+  getChartData,
+  chartBoxProduct,
+  chartBoxMedicine,
+  chartBoxTotalSold,
 };

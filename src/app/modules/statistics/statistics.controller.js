@@ -36,8 +36,53 @@ const latestTransaction = catchAsync(async (req, res) => {
   });
 });
 
+const getChartData = catchAsync(async (req, res) => {
+  const result = await StatisticService.getChartData();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
+const chartBoxProduct = catchAsync(async (req, res) => {
+  const result = await StatisticService.chartBoxProduct();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
+const chartBoxMedicine = catchAsync(async (req, res) => {
+  const result = await StatisticService.chartBoxMedicine();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
+const chartBoxTotalSold = catchAsync(async (req, res) => {
+  const result = await StatisticService.chartBoxTotalSold();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
+
 export const StatisticController = {
   getStatistic,
   getDailyBooking,
   latestTransaction,
+  getChartData,
+  chartBoxProduct,
+  chartBoxMedicine,
+  chartBoxTotalSold,
 };
