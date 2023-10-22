@@ -7,13 +7,21 @@ const addOrder = async (payload) => {
 
 const getAllOrder = async () => {
   const result = await MediatorOrder.find()
-    .populate("product")
+    .populate({
+      path: "products.product",
+      model: "Mediator",
+    })
     .populate("user");
   return result;
 };
 
 const getOrderById = async (id) => {
-  const result = await MediatorOrder.findById(id);
+  const result = await MediatorOrder.findById(id)
+    .populate({
+      path: "products.product",
+      model: "Mediator",
+    })
+    .populate("user");
   return result;
 };
 

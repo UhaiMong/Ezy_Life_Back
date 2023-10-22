@@ -2,10 +2,18 @@ import { Schema, model } from "mongoose";
 
 const medicineOrderSchema = new Schema(
   {
-    medicine: {
-      type: Schema.Types.ObjectId,
-      ref: "Medicine",
-    },
+    medicines: [
+      {
+        medicine: {
+          type: Schema.Types.ObjectId,
+          ref: "Medicine",
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
+      },
+    ],
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

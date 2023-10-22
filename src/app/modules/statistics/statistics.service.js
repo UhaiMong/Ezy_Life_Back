@@ -9,8 +9,8 @@ import { MediatorOrder } from "../mediatorOrder/mediatorOrder.model.js";
 const getStatistic = async () => {
   const bikeRentCount = await BikeRent.countDocuments();
   const parcelCount = await Parcel.countDocuments();
-  const medicine = 20;
-  const product = 10;
+  const medicine = await MedicineOrder.countDocuments();
+  const product = await MediatorOrder.countDocuments();
 
   const data = [
     { name: "Bike Rent", value: bikeRentCount, color: "#0088FE" },
@@ -53,6 +53,33 @@ const getDailyBooking = async () => {
     },
   ]);
 
+  const medicineData = await MedicineOrder.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: sevenDaysAgo },
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        medicine: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
+  const mediatorData = await MediatorOrder.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: sevenDaysAgo },
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        product: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
+
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const combinedData = {};
@@ -79,6 +106,8 @@ const getDailyBooking = async () => {
 
   mergeData(bikeRentData, "bike_rent");
   mergeData(parcelData, "parcel");
+  mergeData(medicineData, "medicine");
+  mergeData(mediatorData, "product");
 
   const data = Object.values(combinedData);
 

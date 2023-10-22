@@ -2,16 +2,21 @@ import { Schema, model } from "mongoose";
 
 const mediatorOrderSchema = new Schema(
   {
-    product: {
-      type: Schema.Types.ObjectId,
-      ref: "Mediator",
-    },
+    products: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Mediator",
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
+      },
+    ],
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-    },
-    quantity: {
-      type: Number,
     },
     paymentStatus: {
       type: String,

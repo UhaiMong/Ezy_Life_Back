@@ -7,7 +7,10 @@ const addOrder = async (payload) => {
 
 const getAllOrder = async () => {
   const result = await MedicineOrder.find()
-    .populate("medicine")
+    .populate({
+      path: "medicines.medicine",
+      model: "Medicine",
+    })
     .populate("user");
   return result;
 };
