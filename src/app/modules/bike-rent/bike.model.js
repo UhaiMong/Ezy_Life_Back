@@ -14,7 +14,6 @@ const BikeSchema = new Schema(
     phoneNumber: {
       type: String,
       required: true,
-      unique: true,
     },
     drivingLicense: {
       type: String,
