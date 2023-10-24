@@ -54,6 +54,22 @@ MediatorSchema.pre("save", function (next) {
   next();
 });
 
+MediatorSchema.pre("findOneAndUpdate", function (next) {
+  if (
+    this._update.basePrice !== undefined &&
+    this._update.discountPrice !== undefined
+  ) {
+    const percentageDiscount =
+      ((this._update.basePrice - this._update.discountPrice) /
+        this._update.basePrice) *
+      100;
+    this._update.discount = Math.round(percentageDiscount * 100) / 100;
+  } else {
+    this._update.discount = null;
+  }
+  next();
+});
+
 MediatorSchema.pre("save", async function (next) {
   if (this.isModified("category")) {
     try {
