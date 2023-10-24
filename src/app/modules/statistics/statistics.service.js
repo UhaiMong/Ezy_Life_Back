@@ -319,32 +319,32 @@ const chartBoxTotalSold = async () => {
     { $group: { _id: null, total: { $sum: "$totalPrice" } } },
   ]);
 
-  const medicineTotalAmount = result[0].total;
+  const medicineTotalAmount = result[0]?.total;
 
   const mediatorResult = await MediatorOrder.aggregate([
     { $group: { _id: null, total: { $sum: "$totalPrice" } } },
   ]);
 
-  const mediatorTotalAmount = mediatorResult[0].total;
+  const mediatorTotalAmount = mediatorResult[0]?.total;
 
   const bikeRentResult = await BikeRent.aggregate([
     { $group: { _id: null, total: { $sum: "$total_amount" } } },
   ]);
 
-  const bikeRentTotalAmount = bikeRentResult[0].total;
+  const bikeRentTotalAmount = bikeRentResult[0]?.total;
 
   const parcelResult = await Parcel.aggregate([
     { $group: { _id: null, total: { $sum: "$total_amount" } } },
   ]);
 
-  const parcelTotalAmount = parcelResult[0].total;
+  const parcelTotalAmount = parcelResult[0]?.total;
 
   // Calculate the sum of total amounts from all collections
   const totalAmountSum =
-    medicineTotalAmount +
-    mediatorTotalAmount +
-    bikeRentTotalAmount +
-    parcelTotalAmount;
+    Number(medicineTotalAmount || 0) +
+    Number(mediatorTotalAmount || 0) +
+    Number(bikeRentTotalAmount || 0) +
+    Number(parcelTotalAmount || 0);
 
   return totalAmountSum;
 };
