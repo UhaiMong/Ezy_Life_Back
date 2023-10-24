@@ -57,6 +57,10 @@ const ParcelSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    isReviewed: {
+      type: String,
+      default: false,
+    },
   },
   {
     timestamps: true,

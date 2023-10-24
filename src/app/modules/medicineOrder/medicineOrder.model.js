@@ -41,6 +41,10 @@ const medicineOrderSchema = new Schema(
     deliveryCharge: {
       type: Number,
     },
+    isReviewed: {
+      type: String,
+      default: false,
+    },
   },
   {
     timestamps: true,
