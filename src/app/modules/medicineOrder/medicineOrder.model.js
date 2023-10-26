@@ -23,11 +23,11 @@ const medicineOrderSchema = new Schema(
     },
     paymentStatus: {
       type: String,
-      default: "pending",
+      default: "Pending",
     },
     shippingStatus: {
       type: String,
-      default: "pending",
+      default: "Pending",
     },
     phoneNumber: {
       type: String,
