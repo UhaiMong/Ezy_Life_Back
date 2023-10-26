@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { bikeSearchableField } from "./bike.constants.js";
 import { BikeRent } from "./bike.model.js";
@@ -65,6 +66,31 @@ const getBikeBooking = async (id) => {
   return result;
 };
 
+const getLoggedInUserOrders = async (id) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(id);
+
+    const result = await BikeRent.find().populate("user");
+
+    const loggedInUserOrders = result.filter((order) =>
+      order.user._id.equals(userId)
+    );
+
+    if (loggedInUserOrders.length === 0) {
+      throw new ApiError(
+        httpStatus.NOT_FOUND,
+        "No Orders Found for the Logged-In User"
+      );
+    }
+    return loggedInUserOrders;
+  } catch (error) {
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "An error occurred while fetching orders"
+    );
+  }
+};
+
 const updateBikeBooking = async (id, payload) => {
   const result = await BikeRent.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
@@ -83,4 +109,5 @@ export const BikeRentService = {
   getBikeBooking,
   updateBikeBooking,
   deleteBooking,
+  getLoggedInUserOrders,
 };

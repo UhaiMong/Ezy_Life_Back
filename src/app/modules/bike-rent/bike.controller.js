@@ -49,6 +49,18 @@ const getBikeBooking = catchAsync(async (req, res) => {
   });
 });
 
+const getLoggedInUserOrders = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await BikeRentService.getLoggedInUserOrders(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Fetch successful",
+    data: result,
+  });
+});
+
 const updateBikeBooking = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await BikeRentService.updateBikeBooking(id, req.body);
@@ -79,4 +91,5 @@ export const BikeRentController = {
   getBikeBooking,
   updateBikeBooking,
   deleteBooking,
+  getLoggedInUserOrders,
 };

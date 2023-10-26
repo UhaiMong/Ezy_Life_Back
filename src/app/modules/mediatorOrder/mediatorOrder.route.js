@@ -8,6 +8,7 @@ router.post("/add-order", MediatorOrderController.addOrder);
 router.get("/", MediatorOrderController.getAllOrder);
 
 router.get("/:id", MediatorOrderController.getOrderById);
+router.get("/user/:id", MediatorOrderController.getLoggedInUserOrders);
 
 router.patch("/:id", MediatorOrderController.updateOrder);
 

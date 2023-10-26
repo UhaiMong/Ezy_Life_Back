@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { parcelSearchableField } from "./parcel.constants.js";
 import { Parcel } from "./parcel.model.js";
@@ -65,6 +66,31 @@ const getBookedParcel = async (id) => {
   return result;
 };
 
+const getLoggedInUserOrders = async (id) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(id);
+
+    const result = await Parcel.find().populate("user");
+
+    const loggedInUserOrders = result.filter((order) =>
+      order.user._id.equals(userId)
+    );
+
+    if (loggedInUserOrders.length === 0) {
+      throw new ApiError(
+        httpStatus.NOT_FOUND,
+        "No Orders Found for the Logged-In User"
+      );
+    }
+    return loggedInUserOrders;
+  } catch (error) {
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "An error occurred while fetching orders"
+    );
+  }
+};
+
 const updateBookedParcel = async (id, payload) => {
   const result = (
     await Parcel.findByIdAndUpdate({ _id: id }, payload, {
@@ -85,4 +111,5 @@ export const ParcelService = {
   getBookedParcel,
   deleteParcel,
   updateBookedParcel,
+  getLoggedInUserOrders,
 };

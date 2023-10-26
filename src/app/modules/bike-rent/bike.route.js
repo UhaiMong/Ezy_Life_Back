@@ -13,6 +13,7 @@ router.post(
 
 router.get("/", BikeRentController.getBikeBookings);
 router.get("/:id", BikeRentController.getBikeBooking);
+router.get("/user/:id", BikeRentController.getLoggedInUserOrders);
 router.patch("/:id", BikeRentController.updateBikeBooking);
 router.delete("/:id", BikeRentController.deleteBooking);
 

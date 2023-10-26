@@ -58,10 +58,22 @@ const deleteOrder = catchAsync(async (req, res) => {
   });
 });
 
+const getLoggedInUserOrders = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await MediatorOrderService.getLoggedInUserOrders(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Mediator Order fetch successful",
+    data: result,
+  });
+});
+
 export const MediatorOrderController = {
   addOrder,
   getAllOrder,
   getOrderById,
   updateOrder,
   deleteOrder,
+  getLoggedInUserOrders,
 };

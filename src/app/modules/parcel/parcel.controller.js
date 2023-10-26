@@ -49,6 +49,18 @@ const getBookedParcel = catchAsync(async (req, res) => {
   });
 });
 
+const getLoggedInUserOrders = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await ParcelService.getLoggedInUserOrders(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Parcel fetch successful",
+    data: result,
+  });
+});
+
 const updateBookedParcel = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await ParcelService.updateBookedParcel(id, req.body);
@@ -79,4 +91,5 @@ export const ParcelController = {
   getBookedParcel,
   deleteParcel,
   updateBookedParcel,
+  getLoggedInUserOrders,
 };
