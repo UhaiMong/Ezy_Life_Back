@@ -9,6 +9,8 @@ router.get("/", MedicineOrderController.getAllOrder);
 
 router.get("/:id", MedicineOrderController.getOrderById);
 
+router.get("/user/:id", MedicineOrderController.getLoggedInUserOrders);
+
 router.patch("/:id", MedicineOrderController.updateOrder);
 
 router.delete("/:id", MedicineOrderController.deleteOrder);

@@ -58,10 +58,22 @@ const deleteOrder = catchAsync(async (req, res) => {
   });
 });
 
+const getLoggedInUserOrders = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await MedicineOrderService.getLoggedInUserOrders(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Medicine order fetched successful",
+    data: result,
+  });
+});
+
 export const MedicineOrderController = {
   addOrder,
   getAllOrder,
   getOrderById,
   updateOrder,
   deleteOrder,
+  getLoggedInUserOrders,
 };

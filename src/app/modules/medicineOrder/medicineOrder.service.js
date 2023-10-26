@@ -1,4 +1,7 @@
+import mongoose from "mongoose";
+import ApiError from "../../../errors/ApiError.js";
 import { MedicineOrder } from "./medicineOrder.model.js";
+import httpStatus from "http-status";
 
 const addOrder = async (payload) => {
   const result = await MedicineOrder.create(payload);
@@ -20,6 +23,31 @@ const getOrderById = async (id) => {
   return result;
 };
 
+const getLoggedInUserOrders = async (id) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(id);
+
+    const result = await MedicineOrder.find().populate("user");
+
+    const loggedInUserOrders = result.filter((order) =>
+      order.user._id.equals(userId)
+    );
+
+    if (loggedInUserOrders.length === 0) {
+      throw new ApiError(
+        httpStatus.NOT_FOUND,
+        "No Orders Found for the Logged-In User"
+      );
+    }
+    return loggedInUserOrders;
+  } catch (error) {
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "An error occurred while fetching orders"
+    );
+  }
+};
+
 const updateOrder = async (id, payload) => {
   const result = await MedicineOrder.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
@@ -38,4 +66,5 @@ export const MedicineOrderService = {
   getOrderById,
   updateOrder,
   deleteOrder,
+  getLoggedInUserOrders,
 };
