@@ -16,4 +16,7 @@ router.get("/", PrescriptionController.getAllPrescription);
 // get single prescription
 router.get("/:id", PrescriptionController.getSinglePrescription);
 
+// delete prescription
+router.delete("/:id", PrescriptionController.deletePrescription);
+
 export const PrescriptionRoutes = router;

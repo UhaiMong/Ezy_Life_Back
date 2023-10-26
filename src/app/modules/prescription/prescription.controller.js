@@ -38,8 +38,19 @@ const getSinglePrescription = catchAsync(async (req, res) => {
   });
 });
 
+const deletePrescription = catchAsync(async (req, res) => {
+  const result = await PrescriptionService.deletePrescription(req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Prescription deleted successfully",
+    data: result,
+  });
+});
+
 export const PrescriptionController = {
   addPrescription,
   getAllPrescription,
   getSinglePrescription,
+  deletePrescription,
 };
