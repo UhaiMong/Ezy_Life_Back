@@ -48,6 +48,19 @@ const getBookedParcel = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const updateBookedParcel = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await ParcelService.updateBookedParcel(id, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Parcel updated successful",
+    data: result,
+  });
+});
+
 const deleteParcel = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await ParcelService.deleteParcel(id);
@@ -65,4 +78,5 @@ export const ParcelController = {
   getBookedParcels,
   getBookedParcel,
   deleteParcel,
+  updateBookedParcel,
 };

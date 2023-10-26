@@ -64,6 +64,14 @@ const getBikeBooking = async (id) => {
   const result = await BikeRent.findById({ _id: id }).populate("user");
   return result;
 };
+
+const updateBikeBooking = async (id, payload) => {
+  const result = await BikeRent.findByIdAndUpdate({ _id: id }, payload, {
+    new: true,
+  }).populate("user");
+  return result;
+};
+
 const deleteBooking = async (id) => {
   const result = await BikeRent.findByIdAndDelete({ _id: id });
   return result;
@@ -73,5 +81,6 @@ export const BikeRentService = {
   bookBikeRent,
   getBikeBookings,
   getBikeBooking,
+  updateBikeBooking,
   deleteBooking,
 };

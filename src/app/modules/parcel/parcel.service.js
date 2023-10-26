@@ -65,6 +65,15 @@ const getBookedParcel = async (id) => {
   return result;
 };
 
+const updateBookedParcel = async (id, payload) => {
+  const result = (
+    await Parcel.findByIdAndUpdate({ _id: id }, payload, {
+      new: true,
+    })
+  ).populate("user");
+  return result;
+};
+
 const deleteParcel = async (id) => {
   const result = await Parcel.findByIdAndDelete({ _id: id });
   return result;
@@ -75,4 +84,5 @@ export const ParcelService = {
   getBookedParcels,
   getBookedParcel,
   deleteParcel,
+  updateBookedParcel,
 };

@@ -13,6 +13,7 @@ router.post(
 
 router.get("/", BikeRentController.getBikeBookings);
 router.get("/:id", BikeRentController.getBikeBooking);
+router.patch("/:id", BikeRentController.updateBikeBooking);
 router.delete("/:id", BikeRentController.deleteBooking);
 
 export const BikeRentRoutes = router;
