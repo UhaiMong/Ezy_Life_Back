@@ -27,7 +27,12 @@ const getLoggedInUserOrders = async (id) => {
   try {
     const userId = new mongoose.Types.ObjectId(id);
 
-    const result = await MedicineOrder.find().populate("user");
+    const result = await MedicineOrder.find()
+      .populate({
+        path: "medicines.medicine",
+        model: "Medicine",
+      })
+      .populate("user");
 
     const loggedInUserOrders = result.filter((order) =>
       order.user._id.equals(userId)

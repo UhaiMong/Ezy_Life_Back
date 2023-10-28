@@ -37,7 +37,12 @@ const getLoggedInUserOrders = async (id) => {
   try {
     const userId = new mongoose.Types.ObjectId(id);
 
-    const result = await MediatorOrder.find().populate("user");
+    const result = await MediatorOrder.find()
+      .populate({
+        path: "products.product",
+        model: "Mediator",
+      })
+      .populate("user");
 
     const loggedInUserOrders = result.filter((order) =>
       order.user._id.equals(userId)
