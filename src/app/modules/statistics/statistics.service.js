@@ -416,7 +416,6 @@ const calculateTotalVisitsLast12Months = async () => {
 
     return barChartBoxVisit;
   } catch (error) {
-    console.error("Error calculating total visits:", error);
     throw error;
   }
 };
