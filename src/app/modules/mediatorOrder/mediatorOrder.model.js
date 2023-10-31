@@ -18,6 +18,9 @@ const mediatorOrderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    quantity: {
+      type: Number,
+    },
     paymentStatus: {
       type: String,
       default: "Pending",
