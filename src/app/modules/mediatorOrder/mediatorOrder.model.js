@@ -42,7 +42,7 @@ const mediatorOrderSchema = new Schema(
       type: Number,
     },
     isReviewed: {
-      type: String,
+      type: Boolean,
       default: false,
     },
   },

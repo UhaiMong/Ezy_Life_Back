@@ -74,7 +74,7 @@ const BikeSchema = new Schema(
       ref: "User",
     },
     isReviewed: {
-      type: String,
+      type: Boolean,
       default: false,
     },
   },

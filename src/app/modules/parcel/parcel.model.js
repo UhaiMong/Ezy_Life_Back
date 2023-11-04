@@ -58,7 +58,7 @@ const ParcelSchema = new Schema(
       ref: "User",
     },
     isReviewed: {
-      type: String,
+      type: Boolean,
       default: false,
     },
   },

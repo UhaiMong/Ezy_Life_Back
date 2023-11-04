@@ -6,9 +6,12 @@ const reviewSchema = new Schema(
       type: String,
       required: true,
     },
-    start: {
+    star: {
       type: Number,
       default: 5,
+    },
+    item: {
+      type: String,
     },
     isApproved: {
       type: String,
