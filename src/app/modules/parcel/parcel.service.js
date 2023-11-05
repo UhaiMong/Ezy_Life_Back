@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { parcelSearchableField } from "./parcel.constants.js";
 import { Parcel } from "./parcel.model.js";
+import ApiError from "../../../errors/ApiError.js";
+import httpStatus from "http-status";
 
 const bookParcel = async (payload) => {
   const result = (await Parcel.create(payload)).populate("user");
@@ -76,12 +78,6 @@ const getLoggedInUserOrders = async (id) => {
       order.user._id.equals(userId)
     );
 
-    if (loggedInUserOrders.length === 0) {
-      throw new ApiError(
-        httpStatus.NOT_FOUND,
-        "No Orders Found for the Logged-In User"
-      );
-    }
     return loggedInUserOrders;
   } catch (error) {
     throw new ApiError(

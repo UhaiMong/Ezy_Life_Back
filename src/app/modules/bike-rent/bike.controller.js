@@ -50,8 +50,7 @@ const getBikeBooking = catchAsync(async (req, res) => {
 });
 
 const getLoggedInUserOrders = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await BikeRentService.getLoggedInUserOrders(id);
+  const result = await BikeRentService.getLoggedInUserOrders(req.params.id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

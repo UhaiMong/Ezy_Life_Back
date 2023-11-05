@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { bikeSearchableField } from "./bike.constants.js";
 import { BikeRent } from "./bike.model.js";
+import ApiError from "../../../errors/ApiError.js";
+import httpStatus from "http-status";
 
 const bookBikeRent = async (payload) => {
   const result = (await BikeRent.create(payload)).populate("user");
@@ -73,17 +75,12 @@ const getLoggedInUserOrders = async (id) => {
     const result = await BikeRent.find().populate("user");
 
     const loggedInUserOrders = result.filter((order) =>
-      order.user._id.equals(userId)
+      order?.user?._id.equals(userId)
     );
 
-    if (loggedInUserOrders.length === 0) {
-      throw new ApiError(
-        httpStatus.NOT_FOUND,
-        "No Orders Found for the Logged-In User"
-      );
-    }
     return loggedInUserOrders;
   } catch (error) {
+    console.log(error);
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       "An error occurred while fetching orders"

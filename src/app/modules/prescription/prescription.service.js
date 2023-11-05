@@ -1,5 +1,7 @@
+import ApiError from "../../../errors/ApiError.js";
 import { PrescriptionImage } from "../../middleware/uploader/uploadPrescription.js";
 import { Prescription } from "./prescription.model.js";
+import httpStatus from "http-status";
 
 const addPrescription = async (payload) => {
   const result = (await Prescription.create(payload)).populate("user");

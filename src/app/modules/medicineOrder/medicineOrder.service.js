@@ -38,12 +38,6 @@ const getLoggedInUserOrders = async (id) => {
       order.user._id.equals(userId)
     );
 
-    if (loggedInUserOrders.length === 0) {
-      throw new ApiError(
-        httpStatus.NOT_FOUND,
-        "No Orders Found for the Logged-In User"
-      );
-    }
     return loggedInUserOrders;
   } catch (error) {
     throw new ApiError(

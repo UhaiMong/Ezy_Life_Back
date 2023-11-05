@@ -3,6 +3,7 @@ import { Mediator } from "./product.model.js";
 import { paginationHelper } from "../../../../helpers/paginationHelpers.js";
 import { mediatorSearchableField } from "./product.constants.js";
 import { MediatorImage } from "../../../middleware/uploader/mediatorImage.js";
+import ApiError from "../../../../errors/ApiError.js";
 
 const addProduct = async (payload) => {
   const result = await Mediator.create(payload);

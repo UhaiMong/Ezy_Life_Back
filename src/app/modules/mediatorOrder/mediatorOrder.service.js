@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { MediatorOrder } from "./mediatorOrder.model.js";
+import ApiError from "../../../errors/ApiError.js";
+import httpStatus from "http-status";
 
 const addOrder = async (payload) => {
   const result = await MediatorOrder.create(payload);
@@ -48,12 +50,6 @@ const getLoggedInUserOrders = async (id) => {
       order.user._id.equals(userId)
     );
 
-    if (loggedInUserOrders.length === 0) {
-      throw new ApiError(
-        httpStatus.NOT_FOUND,
-        "No Orders Found for the Logged-In User"
-      );
-    }
     return loggedInUserOrders;
   } catch (error) {
     throw new ApiError(
