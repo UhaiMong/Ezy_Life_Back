@@ -14,7 +14,7 @@ const reviewSchema = new Schema(
       type: String,
     },
     isApproved: {
-      type: String,
+      type: Boolean,
       default: false,
     },
     user: {

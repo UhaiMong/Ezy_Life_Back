@@ -1,6 +1,8 @@
 import ApiError from "../../../errors/ApiError.js";
+import { paginationHelper } from "../../../helpers/paginationHelpers.js";
 import { BikeRent } from "../bike-rent/bike.model.js";
 import { MediatorOrder } from "../mediatorOrder/mediatorOrder.model.js";
+import { medicineSearchableField } from "../medicine/medicine.constants.js";
 import { MedicineOrder } from "../medicineOrder/medicineOrder.model.js";
 import { Parcel } from "../parcel/parcel.model.js";
 import { Review } from "./review.model.js";
@@ -44,16 +46,73 @@ const addReview = async (payload) => {
   }
 };
 
-const getAllReview = async () => {
-  const result = await Review.find({ isReviewed: true })
-    .sort({ createdAt: -1 })
-    .populate("user")
-    .limit(3);
-  return result;
+const getAllReview = async (filters, paginationOption) => {
+  const { searchTerm, ...filteredData } = filters;
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOption);
+
+  const andConditions = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      $or: medicineSearchableField.map((field) => ({
+        [field]: {
+          $regex: searchTerm,
+          $options: "i",
+        },
+      })),
+    });
+  }
+
+  if (Object.keys(filteredData).length) {
+    andConditions.push({
+      $and: Object.entries(filteredData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
+  const sortConditions = {};
+
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder;
+  }
+
+  const whereCondition =
+    andConditions.length > 0 ? { $and: andConditions } : {};
+
+  const result = await Review.find(whereCondition)
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit)
+    .populate("user");
+
+  const total = await Review.countDocuments(whereCondition);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
 };
 
 const getSingleReview = async (id) => {
-  const result = await Review.findOne({ _id: id }).populate("user");
+  const result = await Review.findById({ _id: id }).populate("user");
+  return result;
+};
+
+const updateReview = async (id, payload) => {
+  const result = await Review.findByIdAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+  return result;
+};
+
+const deleteReview = async (id) => {
+  const result = await Review.findByIdAndDelete({ _id: id });
   return result;
 };
 
@@ -61,4 +120,6 @@ export const ReviewService = {
   addReview,
   getAllReview,
   getSingleReview,
+  deleteReview,
+  updateReview,
 };

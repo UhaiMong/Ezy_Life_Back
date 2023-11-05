@@ -8,5 +8,7 @@ router.post("/add-review", ReviewController.addReview);
 router.get("/", ReviewController.getAllReview);
 
 router.get("/:id", ReviewController.getSingleReview);
+router.patch("/:id", ReviewController.updateReview);
+router.delete("/:id", ReviewController.deleteReview);
 
 export const ReviewRoutes = router;

@@ -27,7 +27,7 @@ const getBlog = catchAsync(async (req, res) => {
   const paginationOptions = pick(req.query, paginationFields);
 
   const result = await BlogService.getBlog(filters, paginationOptions);
-
+  console.log(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
