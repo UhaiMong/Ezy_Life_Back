@@ -45,7 +45,7 @@ const addReview = async (payload) => {
 };
 
 const getAllReview = async () => {
-  const result = await Review.find()
+  const result = await Review.find({ isReviewed: true })
     .sort({ createdAt: -1 })
     .populate("user")
     .limit(3);
