@@ -45,7 +45,10 @@ const addReview = async (payload) => {
 };
 
 const getAllReview = async () => {
-  const result = await Review.find().populate("user");
+  const result = await Review.find()
+    .sort({ createdAt: -1 })
+    .populate("user")
+    .limit(3);
   return result;
 };
 
